@@ -1,6 +1,8 @@
+"use client";
+
 import ky from "ky";
 import { useState } from "react";
-import {CardDto} from "@/types";
+import { CardDto } from "@/types";
 import ImageChooser from "@/components/ImageChooser";
 import Card from "@/components/Card";
 
@@ -58,12 +60,6 @@ export default function CardEditor() {
           Save
         </button>
       </form>
-
-      <Card
-        message={message}
-        title={title}
-        image={selectedImage || "placeholder.png"}
-      />
     </div>
   );
 }

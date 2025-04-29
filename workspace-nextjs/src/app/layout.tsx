@@ -22,13 +22,18 @@ export default function RootLayout({
       </head>
       <body
         className={"font-open-sans min-h-screen bg-stone-100"}
+        suppressHydrationWarning
       >
-          <div className={"container mx-auto flex min-h-screen flex-col gap-y-4"}>
-            <main className={"flex-grow flex-col bg-white px-8 py-4"}>
-              {children}
-            </main>
-            {/*<ReactQueryDevtools />*/}
-          </div>
+        <div className={"container mx-auto flex min-h-screen flex-col gap-y-4"}>
+          <label>
+            Name
+            <input />
+          </label>
+          <main className={"flex-grow flex-col bg-white px-8 py-4"}>
+            {children}
+          </main>
+          {/*<ReactQueryDevtools />*/}
+        </div>
       </body>
     </html>
   );

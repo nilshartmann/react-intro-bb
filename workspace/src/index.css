@@ -50,7 +50,7 @@
     @apply border-amber-500;
   }
   button:disabled {
-    @apply border-amber-500 hover:bg-amber-500;
+    @apply bg-gray-300 hover:bg-gray-300 cursor-default;
   }
 
   form {
@@ -125,6 +125,16 @@
   .CardList {
     @apply flex flex-col items-center gap-y-4;
   }
+
+  .ImageChooser  {
+    @apply flex gap-y-4 gap-x-4
+  }
+
+  .ImageChooser img {
+    @apply max-h-42 border-8 border-transparent  hover:border-red-500
+  }
+
+
 
   /*.Card {*/
   /*  @apply flex w-[40rem] items-start gap-x-4 rounded-lg border border-stone-200 p-4;*/

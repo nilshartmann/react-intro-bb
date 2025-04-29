@@ -1,15 +1,16 @@
 // in real life this would come from the backend
-import { useState } from "react";
 
 const ALL_IMAGES = ["01.png", "02.png", "03.png", "04.png", "05.png"];
 
-export default function ImageChooser() {
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+// "Lifting State Up"
 
-  const handleImageSelected = (name: string) => {
-    const newSelected = name === selectedImage ? null : name;
-    setSelectedImage(newSelected);
-  };
+type ImageChooserProps = {
+  selectedImage: string|null;
+  onSelectedImageChange(newImage: string|null): void
+}
+
+export default function ImageChooser({selectedImage, onSelectedImageChange}: ImageChooserProps) {
+
 
   return (
     <div className={"ImageChooser"}>
@@ -17,7 +18,7 @@ export default function ImageChooser() {
         <img
           key={i}
           src={`/images/${i}`}
-          onClick={() => handleImageSelected(i)}
+          onClick={() => onSelectedImageChange(i)}
           className={selectedImage === i ? "border-amber-600" : ""}
         />
       ))}

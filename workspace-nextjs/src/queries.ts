@@ -19,6 +19,8 @@ export async function fetchComments(cardId: string) {
 }
 
 export async function saveLike(cardId: string) {
-  const r = await ky.post(`http://localhost:7100/cards/${cardId}/likes`).json();
+  const r = await ky
+    .post(`http://localhost:7100/cards/${cardId}/likes?slow=2400`)
+    .json();
   return CardDto.parse(r);
 }

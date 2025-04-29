@@ -1,10 +1,12 @@
 const jwt = require("jsonwebtoken");
 const express = require("express");
 const bodyParser = require("body-parser");
+const { createComments } = require("./data");
 
 const createCards = require("./data").createCards;
 
 let cards = createCards();
+let comments = createComments();
 
 const app = express();
 
@@ -13,7 +15,10 @@ const slowEnabled = process.env.USE_SLOW === "true";
 app.use(bodyParser.json());
 
 app.use((_, res, next) => {
-  res.header("Access-Control-Allow-Methods", "OPTIONS,GET,PUT,POST,PATCH,DELETE");
+  res.header(
+    "Access-Control-Allow-Methods",
+    "OPTIONS,GET,PUT,POST,PATCH,DELETE"
+  );
   res.header("Access-Control-Allow-Origin", "*");
   res.header(
     "Access-Control-Allow-Headers",
@@ -51,7 +56,7 @@ app.get("/cards", (req, res) => {
       } else {
         return 0; // numbers are equal, maintain original order
       }
-    })
+    });
   } else if (orderBy === "likes") {
     result.sort((a, b) => b.likes - a.likes);
   }
@@ -60,9 +65,9 @@ app.get("/cards", (req, res) => {
     result = result.map((a, ix) =>
       ix === 1
         ? {
-          ...a,
-          message: null
-        }
+            ...a,
+            message: null,
+          }
         : a
     );
   }
@@ -70,8 +75,7 @@ app.get("/cards", (req, res) => {
   res.status(200).json(result);
 });
 
-
-const getCardById = (cardId) => cards.find(c => c.id === cardId);
+const getCardById = (cardId) => cards.find((c) => c.id === cardId);
 
 // Return card with specified id (or 404)
 app.get("/cards/:id", (req, res) => {
@@ -84,6 +88,14 @@ app.get("/cards/:id", (req, res) => {
   return res.status(200).json(card);
 });
 
+app.get("/cards/:id/comments", (req, res) => {
+  const thisComments = comments.filter((c) => c.cardId === req.params.id);
+
+  console.log("COMMENTS", thisComments);
+
+  return res.status(200).json(thisComments);
+});
+
 app.post("/cards", (req, res) => {
   const card = req.body;
   if (!card) {
@@ -91,25 +103,33 @@ app.post("/cards", (req, res) => {
   }
 
   if (!card.message) {
-    return res.status(400).json({ error: "card.message must be defined and not empty" });
+    return res
+      .status(400)
+      .json({ error: "card.message must be defined and not empty" });
   }
 
   if (!card.title) {
-    return res.status(400).json({ error: "card.title must be defined and not empty" });
+    return res
+      .status(400)
+      .json({ error: "card.title must be defined and not empty" });
   }
 
   if (card.title.length < 4) {
-    return res.status(400).json({ error: "card.title must have at least four chars" });
+    return res
+      .status(400)
+      .json({ error: "card.title must have at least four chars" });
   }
-
 
   if (card.message.startsWith("fail")) {
-    return res.status(400).json({ error: "card.message should not start with 'fail'" });
+    return res
+      .status(400)
+      .json({ error: "card.message should not start with 'fail'" });
   }
 
-
   if (!card.image) {
-    return res.status(400).json({ error: "card.image must be defined and not empty" });
+    return res
+      .status(400)
+      .json({ error: "card.image must be defined and not empty" });
   }
 
   const newCard = {
@@ -117,8 +137,8 @@ app.post("/cards", (req, res) => {
     message: card.message,
     title: card.title,
     image: card.image,
-    likes: 0
-  }
+    likes: 0,
+  };
 
   cards = [...cards, newCard];
 
@@ -134,12 +154,12 @@ app.post("/cards/:id/likes", (req, res) => {
 
   if (card.id === "C5") {
     // simluation: error in processing
-    return res.status(400).json({ error: "Could not handle request"});
+    return res.status(400).json({ error: "Could not handle request" });
   }
 
-  const likedCard = {...card, likes: card.likes + 1};
+  const likedCard = { ...card, likes: card.likes + 1 };
 
-  cards = cards.map(c => c.id === card.id ? likedCard : c);
+  cards = cards.map((c) => (c.id === card.id ? likedCard : c));
 
   res.status(200).json(likedCard);
 });
@@ -147,7 +167,6 @@ app.post("/cards/:id/likes", (req, res) => {
 const port = process.env.SERVER_PORT || 7100;
 
 app.listen(port, () => {
-
   console.log(`
     📞    Card API Server listening on port ${port}
     👉    Try http://localhost:${port}/cards

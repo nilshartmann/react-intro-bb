@@ -60,6 +60,12 @@ export default function CardEditor() {
           Save
         </button>
       </form>
+
+      <Card
+        title={title}
+        message={message}
+        image={selectedImage || "placeholder.png"}
+      />
     </div>
   );
 }

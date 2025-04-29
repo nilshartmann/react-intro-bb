@@ -91,8 +91,6 @@ app.get("/cards/:id", (req, res) => {
 app.get("/cards/:id/comments", (req, res) => {
   const thisComments = comments.filter((c) => c.cardId === req.params.id);
 
-  console.log("COMMENTS", thisComments);
-
   return res.status(200).json(thisComments);
 });
 

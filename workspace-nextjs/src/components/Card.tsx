@@ -4,7 +4,7 @@ type CardProps = {
   image: string;
 };
 
-export default function ({ title, message, image }: CardProps) {
+export default function Card({ title, message, image }: CardProps) {
   return (
     <div className={"CardDisplay"}>
       <h2>{title}</h2>
